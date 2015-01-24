@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/wzrdtales/umigrate-db-migrate/issues"
   },
-  "homepage": "https://github.com/wzrdtales/umigrate-db-migrate"
+  "homepage": "https://github.com/wzrdtales/umigrate-db-migrate",
+  "dependencies": {
+    "umigrate-template-basedriver": "^1.0.0"
+  }
 }
