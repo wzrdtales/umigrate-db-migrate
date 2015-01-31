@@ -231,7 +231,7 @@ DBMigrateMigrationBuilder.prototype = {
                 fieldMapping = '{ ',
                 key = keys[ oKeys[ kI ] ],
                 referencedTable = '',
-                rules = util.format( '{ onDelete: \'%s\', onUpdate: \'%s\' }', key[ 0 ][ 5 ], key[ 0 ][ 6 ] );
+                rules = util.format( '{ onDelete: \'%s\', onUpdate: \'%s\' }', key[ 0 ][ 6 ], key[ 0 ][ 5 ] );
 
             if( !firstLine )
             {
