@@ -7,14 +7,14 @@ util.inherits( DBMigrateMigrationBuilder, BaseTemplate );
 function DBMigrateMigrationBuilder( primary )
 {
     this.primary = primary;
-    this.extra_values = 
+    this.extra_values =
     {
         'ai': ', autoIncrement: true',
         'OUCT': '' //yet not supported by db_migrate
     };
 
     this.migrationTemplate = [
-        [ 
+        [
             '\ndbm = dbm || require(\'db-migrate\');\nvar type = dbm.dataType;\nasync = async || require(\'async\');',
             '\n\nexports.up = function(db, callback) {\n'
         ].join( '\n' ),
@@ -56,7 +56,7 @@ DBMigrateMigrationBuilder.prototype = {
         dropColumn += '], callback);';
 
         addColumn += this.Columns( aC, columns, ' } ),' );
-        addColumn = addColumn.substring( 0, addColumn.length - 1 ) + '], callback);'; 
+        addColumn = addColumn.substring( 0, addColumn.length - 1 ) + '], callback);';
 
         return this.createMigration( addColumn, dropColumn, drop );
     },
@@ -199,7 +199,7 @@ DBMigrateMigrationBuilder.prototype = {
     engine: function ( table, engines, drop )
     {
         var sql = util.format( 'ALTER TABLE `%s` ENGINE = ?', table );
-        
+
         engines[ 1 ] = engines[ 1 ] || engines[ 0 ];
         engines[ 0 ] = engines[ 0 ] || engines[ 1 ];
 
@@ -267,6 +267,57 @@ DBMigrateMigrationBuilder.prototype = {
         dropFK += '\n], callback);';
 
         return this.createMigration( addFK, dropFK, drop );
+    },
+
+    changeForeign: function( table, keys, drop )
+    {
+        var addKey = 'async.series([',
+            dropKey = 'async.series([',
+            firstLine = true,
+            kI = 0, _kI = 0;
+
+        var aK = util.format( '\ndb.removeForeignKey.bind(db, \'%s\', \'%%s\'),\ndb.addForeignKey.bind(db, \'%s\', \'%%s\', \'%%s\', %%s, %%s', table, table );
+        var dK = util.format( '\ndb.removeForeignKey.bind(db, \'%s\', \'%%s\'),\ndb.addForeignKey.bind(db, \'%s\', \'%%s\', \'%%s\', %%s, %%s', table, table );
+        var es = '\'%s\'';
+
+        oKeys = Object.keys( keys );
+        for( kI = 0; kI < oKeys.length; ++kI )
+        {
+            var _firstLine = true,
+                fieldMapping = '{ ',
+                key = keys[ oKeys[ kI ] ],
+                referencedTable = '',
+                rules = util.format( '{ onDelete: \'%s\', onUpdate: \'%s\' }', key[ 0 ][ 6 ], key[ 0 ][ 5 ] );
+
+            if( !firstLine )
+            {
+                addFK += ',';
+                dropFK += ',';
+            }
+            else
+            {
+                firstLine = false;
+            }
+
+            for( var i = 0; i < key.length; ++i )
+            {
+                if( !_firstLine )
+                {
+                    fieldMapping += ',';
+                }
+                else
+                {
+                    _firstLine = false;
+                }
+
+                fieldMapping += util.format( '\'%s\': \'%s\'', key[ i ][ 0 ], key[ i ][ 3 ] );
+            }
+
+            fieldMapping += ' }';
+
+        }
+
+        return null;
     },
 
     Columns: function ( begin, columns, end, br )
