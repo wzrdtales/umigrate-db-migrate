@@ -329,7 +329,7 @@ DBMigrateMigrationBuilder.prototype = {
             if ( br && i > 0 )
                 create += '\n';
 
-            create += util.format( begin, columns[ i ][ 0 ], columns[ i ][ 1 ][ 0 ] );
+            create += util.format( begin, this.escape( columns[ i ][ 0 ] ), this.definitionEscape( columns[ i ][ 1 ][ 0 ] ) );
             if ( columns[ i ][ 1 ][ 2 ] )
                 create += ', unsigned: true';
 
@@ -357,6 +357,26 @@ DBMigrateMigrationBuilder.prototype = {
         }
 
         return create;
+    },
+
+    escape: function( variable )
+    {
+        if( /^[A-Za-z]\w+$/.test(variable) )
+        {
+            return variable;
+        }
+
+        return '\'' + variable + '\'';
+    },
+
+    definitionEscape: function( variable )
+    {
+        if( variable.indexOf('\'') !== -1 )
+        {
+            return variable.replace(/\'/g, '\'\'');
+        }
+
+        return variable;
     },
 
     createMigration: function ( up, down, drop )
