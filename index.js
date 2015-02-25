@@ -335,6 +335,8 @@ DBMigrateMigrationBuilder.prototype = {
 
             if ( !columns[ i ][ 2 ] )
                 create += ', notNull: true';
+            else
+                create += ', notNull: false';
 
             if ( columns[ i ][ 3 ] )
                 create += util.format( ', defaultValue: \'%s\'', columns[ i ][ 3 ] );
