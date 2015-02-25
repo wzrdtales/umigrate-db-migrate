@@ -1,6 +1,6 @@
 {
   "name": "umigrate-db-migrate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A db-migrate template for umigrate.",
   "main": "index.js",
   "scripts": {
