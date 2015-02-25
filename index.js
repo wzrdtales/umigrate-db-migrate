@@ -375,7 +375,7 @@ DBMigrateMigrationBuilder.prototype = {
     {
         if( variable.indexOf('\'') !== -1 )
         {
-            return variable.replace(/\'/g, '\'\'');
+            return variable.replace(/\'/g, '\\\'');
         }
 
         return variable;
