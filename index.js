@@ -15,7 +15,8 @@ function DBMigrateMigrationBuilder( primary )
 
     this.migrationTemplate = [
         [
-            '\ndbm = dbm || require(\'db-migrate\');\nvar type = dbm.dataType;\nasync = async || require(\'async\');',
+            '\nvar dbm;\nvar type;\nasync = async || require(\'async\');',
+            '\n\nexports.setup = function(options) {\ndbm = options.dbmigrate;\ntype = dbm.dataType;\n};',
             '\n\nexports.up = function(db, callback) {\n'
         ].join( '\n' ),
         '\n};\n\nexports.down = function(db, callback) {\n',
