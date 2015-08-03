@@ -15,8 +15,7 @@ function DBMigrateMigrationBuilder( primary )
 
     this.migrationTemplate = [
         [
-            '\nvar dbm;\nvar type;\nasync = async || require(\'async\');',
-            '\n\nexports.setup = function(options) {\ndbm = options.dbmigrate;\ntype = dbm.dataType;\n};',
+            '\ndbm = dbm || require(\'db-migrate\');\nvar type = dbm.dataType;\nasync = async || require(\'async\');',
             '\n\nexports.up = function(db, callback) {\n'
         ].join( '\n' ),
         '\n};\n\nexports.down = function(db, callback) {\n',
@@ -340,7 +339,7 @@ DBMigrateMigrationBuilder.prototype = {
                 create += ', notNull: false';
 
             if ( columns[ i ][ 3 ] )
-                create += util.format( ', defaultValue: \'%s\'', columns[ i ][ 3 ] );
+                create += util.format( ', defaultValue: \'%s\'', this.definitionEscape( columns[ i ][ 3 ] ) );
 
             //Some DBS may have no primary keys. But I like to have the primary oKeys[ kI ] information in the creation information,
             //instead of storing them separated like the other keys.
